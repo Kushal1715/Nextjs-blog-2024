@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import AddNewBlog from "../add-new-blog"
 import {
   Card,
@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "../ui/button"
+import { useRouter } from "next/navigation"
 
 const initialBlogData = {
   title: '',
@@ -22,6 +23,11 @@ function BlogOverview({ blogList }) {
   const [openBlogDialog, setOpenBlogDialog] = useState(false);
   const [loading, setLoading] = useState(false);
   const [blogs, setBlogs] = useState(initialBlogData)
+  const router = useRouter();
+
+  useEffect(() => {
+    router.refresh();
+  }, [])
 
   async function addBlogs() {
     try {
@@ -35,6 +41,7 @@ function BlogOverview({ blogList }) {
         setOpenBlogDialog(false);
         setLoading(false);
         setBlogs(initialBlogData)
+        router.refresh();
       }
     } catch (e) {
       setLoading(false);
