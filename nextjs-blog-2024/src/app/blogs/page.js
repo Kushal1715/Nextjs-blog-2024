@@ -15,8 +15,7 @@ async function getBlogs() {
 export default async function Blogs() {
 
   const blogs = await getBlogs();
-  console.log(blogs)
   return (
-    <BlogOverview />
+    <BlogOverview blogList={blogs} />
   )
 }
