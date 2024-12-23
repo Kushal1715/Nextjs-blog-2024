@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const AddNewBlog = ({ openBlogDialog, setOpenBlogDialog }) => {
+const AddNewBlog = ({ openBlogDialog, setOpenBlogDialog, loading, setLoading, blogs, setBlogs }) => {
   return (
     <>
       <div className=''>
@@ -32,13 +32,17 @@ const AddNewBlog = ({ openBlogDialog, setOpenBlogDialog }) => {
               <Label htmlFor="name" className="text-right">
                 Title
               </Label>
-              <Input id="title" className="col-span-3" />
+              <Input name='title' id="title" value={blogs.title} className="col-span-3" onChange={(event) => {
+                setBlogs({ ...blogs, title: event.target.value })
+              }} />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="username" className="text-right">
                 Description
               </Label>
-              <Input id="description" className="col-span-3" />
+              <Input name='description' id="description" value={blogs.description} className="col-span-3" onChange={(event) => {
+                setBlogs({ ...blogs, description: event.target.value })
+              }} />
             </div>
           </div>
           <DialogFooter>
