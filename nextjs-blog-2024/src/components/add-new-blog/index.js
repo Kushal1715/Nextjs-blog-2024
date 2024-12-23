@@ -16,13 +16,16 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const AddNewBlog = ({ openBlogDialog, setOpenBlogDialog, loading, setLoading, blogs, setBlogs }) => {
+const AddNewBlog = ({ addBlogs, openBlogDialog, setOpenBlogDialog, loading, blogs, setBlogs, initialBlogData }) => {
   return (
     <>
       <div className=''>
         <button className='bg-black text-white px-6 py-2 rounded' onClick={() => setOpenBlogDialog(true)}>Add New Blog</button>
       </div>
-      <Dialog open={openBlogDialog} onOpenChange={setOpenBlogDialog}>
+      <Dialog open={openBlogDialog} onOpenChange={() => {
+        setOpenBlogDialog(false)
+        setBlogs(initialBlogData)
+      }}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Add New Blog</DialogTitle>
@@ -46,7 +49,7 @@ const AddNewBlog = ({ openBlogDialog, setOpenBlogDialog, loading, setLoading, bl
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit" onClick={addBlogs}>{loading ? 'saving changes' : 'save changes'}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
