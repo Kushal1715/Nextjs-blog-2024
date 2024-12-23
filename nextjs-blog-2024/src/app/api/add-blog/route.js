@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 
 const AddNewBlog = Joi.object({
   title: Joi.string().required(),
-  description: Joi.string().required();
+  description: Joi.string().required()
 })
 
 
