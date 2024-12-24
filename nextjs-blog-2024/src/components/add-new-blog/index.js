@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const AddNewBlog = ({ addBlogs, openBlogDialog, setOpenBlogDialog, loading, blogs, setBlogs, initialBlogData }) => {
+const AddNewBlog = ({ addBlogs, openBlogDialog, setOpenBlogDialog, loading, blogs, setBlogs, initialBlogData, editBlogId, setEditBlogId }) => {
   return (
     <>
       <div className=''>
@@ -25,10 +25,11 @@ const AddNewBlog = ({ addBlogs, openBlogDialog, setOpenBlogDialog, loading, blog
       <Dialog open={openBlogDialog} onOpenChange={() => {
         setOpenBlogDialog(false)
         setBlogs(initialBlogData)
+        setEditBlogId(null)
       }}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add New Blog</DialogTitle>
+            <DialogTitle>{editBlogId ? 'Edit Blog' : 'Add New Blog'}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

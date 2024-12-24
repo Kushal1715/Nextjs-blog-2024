@@ -25,6 +25,7 @@ function BlogOverview({ blogList }) {
   const [loading, setLoading] = useState(false);
   const [blogs, setBlogs] = useState(initialBlogData)
   const router = useRouter();
+  const [editBlogId, setEditBlogId] = useState(null);
 
   useEffect(() => {
     router.refresh();
@@ -33,16 +34,22 @@ function BlogOverview({ blogList }) {
   async function addBlogs() {
     try {
       setLoading(true);
-      const response = await fetch('/api/add-blog', {
-        method: 'POST',
-        body: JSON.stringify(blogs),
-      })
+      const response = editBlogId !== null ?
+        await fetch(`/api/update-blog?id=${editBlogId}`, {
+          method: 'PUT',
+          body: JSON.stringify(blogs),
+        })
+        : await fetch('/api/add-blog', {
+          method: 'POST',
+          body: JSON.stringify(blogs),
+        })
       const result = await response.json();
       if (result?.success) {
         setOpenBlogDialog(false);
         setLoading(false);
         setBlogs(initialBlogData)
         router.refresh();
+        setEditBlogId(null)
       }
     } catch (e) {
       setLoading(false);
@@ -65,9 +72,15 @@ function BlogOverview({ blogList }) {
     }
   }
 
+  const handleEdit = (currentBlog) => {
+    setEditBlogId(currentBlog._id);
+    setOpenBlogDialog(true);
+    setBlogs({ title: currentBlog.title, description: currentBlog.description })
+  }
+
   return (
     <div className="min-h-screen flex flex-col gap-10 bg-gradient-to-r from-purple-500 to-blue-600 p-6">
-      <AddNewBlog addBlogs={addBlogs} initialBlogData={initialBlogData} openBlogDialog={openBlogDialog} setOpenBlogDialog={setOpenBlogDialog} loading={loading} setLoading={setLoading} blogs={blogs} setBlogs={setBlogs} />
+      <AddNewBlog addBlogs={addBlogs} initialBlogData={initialBlogData} openBlogDialog={openBlogDialog} setOpenBlogDialog={setOpenBlogDialog} loading={loading} setLoading={setLoading} blogs={blogs} setBlogs={setBlogs} editBlogId={editBlogId} setEditBlogId={setEditBlogId} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
         {
           blogList && blogList.length > 0 ? blogList.map((blog, index) => <Card key={index} className="p-5">
@@ -75,7 +88,7 @@ function BlogOverview({ blogList }) {
               <CardTitle className="mb-5">{blog.title}</CardTitle>
               <CardDescription>{blog.description}</CardDescription>
               <div className="mt-5 flex gap-5 items-center">
-                <Button>Edit</Button>
+                <Button onClick={() => handleEdit(blog)}>Edit</Button>
                 <Button onClick={() => handleBlogDelete(blog._id)}>Delete</Button>
               </div>
 
