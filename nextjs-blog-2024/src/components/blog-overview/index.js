@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "../ui/button"
 import { useRouter } from "next/navigation"
+import { Label } from "@radix-ui/react-label"
 
 const initialBlogData = {
   title: '',
@@ -49,7 +50,21 @@ function BlogOverview({ blogList }) {
     }
   }
 
-  console.log(blogs)
+  async function handleBlogDelete(id) {
+    try {
+      const response = await fetch(`/api/delete-blog?id=${id}`, {
+        method: 'DELETE'
+      })
+      const result = await response.json();
+      if (result?.success) {
+        router.refresh();
+      }
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col gap-10 bg-gradient-to-r from-purple-500 to-blue-600 p-6">
       <AddNewBlog addBlogs={addBlogs} initialBlogData={initialBlogData} openBlogDialog={openBlogDialog} setOpenBlogDialog={setOpenBlogDialog} loading={loading} setLoading={setLoading} blogs={blogs} setBlogs={setBlogs} />
@@ -61,11 +76,11 @@ function BlogOverview({ blogList }) {
               <CardDescription>{blog.description}</CardDescription>
               <div className="mt-5 flex gap-5 items-center">
                 <Button>Edit</Button>
-                <Button>Delete</Button>
+                <Button onClick={() => handleBlogDelete(blog._id)}>Delete</Button>
               </div>
 
             </CardContent>
-          </Card>) : null
+          </Card>) : <Label className="text-3xl font-bold w-full mx-auto">No blog found. Please add Blog</Label>
         }
       </div>
     </div>
